@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cj.edu.security.mapper.UserMapper">
+
+    <insert id="addUser">
+        insert into user (username,password) values(#{username},#{password})
+    </insert>
+
+    <select id="findUserByUsernameAndPassword" resultType="cn.cj.edu.security.entity.SimpleUser">
+        select * from user where username = #{username} and password = #{password}
+    </select>
+
+    <select id="findUserUserName" resultType="cn.cj.edu.security.entity.SimpleUser">
+        select * from user where username = #{username}
+    </select>
+
+    <select id="findUserRoleByUserName" resultType="cn.cj.edu.security.entity.SimpleRole">
+        SELECT name,description FROM `user`  right JOIN user_role on user_role.uid =  user.id right JOIN role on role.id = user_role.rid
+        where username = #{username}
+    </select>
+
+    <select id="findUserPermissionByUserName" resultType="cn.cj.edu.security.entity.SimplePermission">
+        SELECT name,description FROM `user`  right JOIN user_permission on user_permission.uid =  user.id right JOIN permission on permission.id = user_permission.pid
+        where username = #{username}
+    </select>
+
+
+
+</mapper>
