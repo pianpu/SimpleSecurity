@@ -3,10 +3,7 @@ package cn.cj.edu.security.config;
 
 
 import cn.cj.edu.security.annotation.HasRole;
-import cn.cj.edu.security.exception.TokenIsErrorException;
-import cn.cj.edu.security.exception.TokenIsExpiredException;
-import cn.cj.edu.security.exception.TokenIsNullException;
-import cn.cj.edu.security.exception.TokenUserIsNullException;
+import cn.cj.edu.security.exception.*;
 import cn.cj.edu.security.service.UserService;
 import cn.cj.edu.security.utils.JwtUtils;
 import cn.cj.edu.security.utils.Result;
@@ -85,7 +82,8 @@ public class HasRoleConfig {
 
 
         if (!flag){
-            return securityDataSource.handleNoneRole();
+//            return securityDataSource.handleNoneRole();
+            throw new NoneRoleException();
         }
         try {
             result = pjp.proceed();

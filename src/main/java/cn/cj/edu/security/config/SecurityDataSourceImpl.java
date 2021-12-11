@@ -19,7 +19,7 @@ import java.util.List;
  * 重写接口，提供权限数据源
  * 打包的时候需要注释掉。由用户自行重写。
  */
-@Service
+//@Service
 public class SecurityDataSourceImpl implements SecurityDataSource{
     Logger logger = LoggerFactory.getLogger(SecurityDataSourceImpl.class);
 

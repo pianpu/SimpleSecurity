@@ -1,10 +1,7 @@
 package cn.cj.edu.security.config;
 
 
-import cn.cj.edu.security.exception.TokenIsErrorException;
-import cn.cj.edu.security.exception.TokenIsExpiredException;
-import cn.cj.edu.security.exception.TokenIsNullException;
-import cn.cj.edu.security.exception.TokenUserIsNullException;
+import cn.cj.edu.security.exception.*;
 import cn.cj.edu.security.utils.JwtUtils;
 import cn.cj.edu.security.utils.Result;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -82,7 +79,7 @@ public class HasPermissionConfig {
         }
 
         if (!flag){
-            return securityDataSource.handleNonePermission();
+            throw new NonePermissionException();
         }
         try {
             result = pjp.proceed();

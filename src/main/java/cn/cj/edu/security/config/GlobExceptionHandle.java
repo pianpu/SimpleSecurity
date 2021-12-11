@@ -1,9 +1,6 @@
 package cn.cj.edu.security.config;
 
-import cn.cj.edu.security.exception.TokenIsErrorException;
-import cn.cj.edu.security.exception.TokenIsExpiredException;
-import cn.cj.edu.security.exception.TokenIsNullException;
-import cn.cj.edu.security.exception.TokenUserIsNullException;
+import cn.cj.edu.security.exception.*;
 import cn.cj.edu.security.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +64,28 @@ public class GlobExceptionHandle {
     @ResponseBody
     public Object exceptionHandlerTokenUserIsNullException(TokenUserIsNullException e){
         return securityDataSource.handleTokenUserIsNull();
+    }
+
+    /**
+     * 处理无权限
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = NonePermissionException.class)
+    @ResponseBody
+    public Object exceptionHandlerNonePermissionException(NonePermissionException e){
+        return securityDataSource.handleNonePermission();
+    }
+
+    /**
+     * 处理无角色
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = NoneRoleException.class)
+    @ResponseBody
+    public Object exceptionHandlerNoneRoleException(NoneRoleException e){
+        return securityDataSource.handleNoneRole();
     }
 
 
