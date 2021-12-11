@@ -56,7 +56,7 @@ class UserInterceptor implements HandlerInterceptor {
     @Autowired
     JwtUtils jwtUtils;
     @Autowired
-    UserService userService;
+    SecurityDataSource securityDataSource;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -65,12 +65,17 @@ class UserInterceptor implements HandlerInterceptor {
         if (token == null || token.length() < 0) {
             response.getWriter().write("请先登录...");
             return false;
-        } else if (!jwtUtils.checkTokenP(token)) {
+        } else if (!jwtUtils.checkTokenIsUser(token)) {
+            // 用户不存在
+            response.getWriter().write("用户不存在...");
+            return false;
+        } else if (!jwtUtils.checkTokenExpired(token)) {
+            // Token过期
             response.getWriter().write("Token过期...");
             return false;
         }
         String username = jwtUtils.getUsername(token);
-        SimpleUser user = userService.findUserByUserName(username);
+        SimpleUser user = securityDataSource.findUserByUserName(username);
         if (user != null) {
             return true;
         }

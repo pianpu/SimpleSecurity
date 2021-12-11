@@ -2,7 +2,7 @@ package cn.cj.edu.security.config;
 
 import cn.cj.edu.security.entity.SimplePermission;
 import cn.cj.edu.security.entity.SimpleRole;
-import cn.cj.edu.security.mapper.UserMapper;
+
 import cn.cj.edu.security.utils.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +24,7 @@ public class SimpleCheckRoleAndPermission {
 
     Logger logger = LoggerFactory.getLogger(SimpleCheckRoleAndPermission.class);
 
-    @Autowired
-    UserMapper userMapper;
+
 
     @Autowired
     RedisUtil redisUtil;

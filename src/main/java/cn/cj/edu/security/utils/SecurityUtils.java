@@ -2,6 +2,10 @@ package cn.cj.edu.security.utils;
 
 import cn.cj.edu.security.config.SecurityDataSource;
 
+import cn.cj.edu.security.exception.TokenIsErrorException;
+import cn.cj.edu.security.exception.TokenIsExpiredException;
+import cn.cj.edu.security.exception.TokenIsNullException;
+import cn.cj.edu.security.exception.TokenUserIsNullException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +40,17 @@ public class SecurityUtils {
         String token = request.getHeader("token");
 
         if (token==null || token.length() <0){
-            logger.error("当前Token为空，无法获取操作者用户名");
-            return "";
-//            throw new RuntimeException("请先登录...");
-        }else if (!jwtUtils.checkTokenP(token)){
-            logger.error("当前Token过期或伪造，无法获取操作者用户名");
-//            throw new RuntimeException("Token过期...");
-            return "";
+            // 处理Token 为空状态
+            throw new TokenIsNullException();
+        }else if (!jwtUtils.checkToken(token)){
+            // 处理Token 校验不通过状态
+            throw new TokenIsErrorException();
+        } else if (!jwtUtils.checkTokenIsUser(token)){
+            // 处理Token 挂靠用户不存在状态
+            throw new TokenUserIsNullException();
+        } else if (!jwtUtils.checkTokenExpired(token)){
+            // 处理Token 过期不通过状态
+            throw new TokenIsExpiredException();
         }
         String username = jwtUtils.getUsername(token);
         return username;

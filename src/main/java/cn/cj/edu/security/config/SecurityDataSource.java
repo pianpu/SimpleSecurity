@@ -31,4 +31,29 @@ public interface SecurityDataSource {
      */
     List<SimplePermission> findUserPermissionByUserName(String username);
 
+    /**
+     * 处理Token为空
+     * @return
+     */
+    Object handleTokenIsNull();
+
+
+    /**
+     * 错误的Token凭证
+     * @return
+     */
+    Object handleTokenIsError();
+
+    /**
+     * Token已过期
+     * @return
+     */
+    Object handleTokenExpired();
+
+    /**
+     * 当前用户已不存在数据库。可能被删除了。导致该token无效
+     * @return
+     */
+    Object handleTokenUserIsNull();
+
 }

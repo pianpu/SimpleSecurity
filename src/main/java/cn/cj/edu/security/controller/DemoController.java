@@ -46,8 +46,7 @@ public class DemoController {
     }
 
     @GetMapping("/ddd")
-    public Result ddd(@SecurityUser SimpleUser user){
-        System.out.println(user);
+    public Result ddd(@SecurityUser String username){
         return Result.success(securityUtils.getUser());
     }
 }

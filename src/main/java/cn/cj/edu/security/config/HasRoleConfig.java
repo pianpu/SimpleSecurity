@@ -25,6 +25,8 @@ public class HasRoleConfig {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    SecurityDataSource securityDataSource;
 
     @Autowired
     SimpleCheckRoleAndPermission simpleCheckRoleAndPermission;
@@ -43,9 +45,14 @@ public class HasRoleConfig {
         String token = request.getHeader("token");
         // 拦截暂未登录或已过期
         if (token==null || token.length() <0){
-            return Result.fail("请先登录...");
-        }else if (!jwtUtils.checkTokenP(token)){
+            // token为空
+            return securityDataSource.handleTokenIsNull();
+        }else if (!jwtUtils.checkTokenIsUser(token)){
+            // 用户不存在
             return Result.fail("Token过期...");
+        }else if (!jwtUtils.checkTokenExpired(token)){
+            // token 过期
+            return securityDataSource.handleTokenExpired();
         }
         // 判断用户是否有具体权限
         String username = jwtUtils.getUsername(token);

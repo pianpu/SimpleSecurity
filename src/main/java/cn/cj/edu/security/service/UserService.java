@@ -13,30 +13,11 @@ public interface UserService {
      * @param user
      * @return
      */
-    Result findUserByUsernameAndPassword(Object user);
+    Result findUserByUsernameAndPassword(SimpleUser user);
 
-    Integer addUser(SimpleUser user);
 
-    /**
-     * 根据用户名查询用户
-     * @param username
-     * @return
-     */
-    SimpleUser findUserByUserName(String username);
 
-    /**
-     * 查询该用户用于什么角色
-     * @param username
-     * @return
-     */
-    List<SimpleRole> findUserRoleByUserName(String username);
 
-    /**
-     * 查询该用户用于什么权限
-     * @param username
-     * @return
-     */
-    List<SimplePermission> findUserPermissionByUserName(String username);
 
 
 }

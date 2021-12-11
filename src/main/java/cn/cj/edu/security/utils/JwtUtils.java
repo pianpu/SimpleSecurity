@@ -61,11 +61,11 @@ public class JwtUtils {
 
 
     /**
-     * 校验token是否正确 且 判断数据库是否有包含次用户
+     * 校验token是否正确 且 判断数据库是否有包含该用户
      * @param token
      * @return
      */
-    public boolean checkTokenP(String token){
+    public boolean checkTokenIsUser(String token){
         try{
             Jwts.parser()
                     .setSigningKey("123456")
@@ -77,6 +77,24 @@ public class JwtUtils {
             if (null == user){
                 return false;
             }
+            return true;
+        }catch (Exception e){
+            logger.error("e=>" + e);
+            return false;
+        }
+    }
+
+    /**
+     * 校验token是否过期
+     * @param token
+     * @return
+     */
+    public boolean checkTokenExpired(String token){
+        try{
+            Jwts.parser()
+                    .setSigningKey("123456")
+                    .parseClaimsJws(token)
+                    .getBody();
             // 从redis中获取是否存在
             if (!isExist(token)){
                 return false;
