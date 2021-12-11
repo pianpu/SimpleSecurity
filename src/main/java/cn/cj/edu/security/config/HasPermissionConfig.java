@@ -4,9 +4,11 @@ package cn.cj.edu.security.config;
 import cn.cj.edu.security.exception.*;
 import cn.cj.edu.security.utils.JwtUtils;
 import cn.cj.edu.security.utils.Result;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,8 +36,65 @@ public class HasPermissionConfig {
     @Pointcut("@annotation(cn.cj.edu.security.annotation.HasPermission)")
     public void hasPermission(){}
 
-    @Around("@annotation(hasPermission)")
-    public Object Interceptor(ProceedingJoinPoint pjp,HasPermission hasPermission){
+//    @Around("@annotation(hasPermission)")
+//    public Object Interceptor(ProceedingJoinPoint pjp,HasPermission hasPermission){
+//        Object result = null;
+//        // 获取请求参数
+//        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+//        ServletRequestAttributes servletRequest= (ServletRequestAttributes) requestAttributes;
+//        HttpServletRequest request = servletRequest.getRequest();
+//        String token = request.getHeader("token");
+//        // 拦截暂未登录或已过期
+//        if (token == null){
+//            // 处理Token 为空状态
+//            throw new TokenIsNullException();
+//        }else if (!jwtUtils.checkToken(token)){
+//            // 处理Token 校验不通过状态
+//            throw new TokenIsErrorException();
+//        } else if (!jwtUtils.checkTokenIsUser(token)){
+//            // 处理Token 挂靠用户不存在状态
+//            throw new TokenUserIsNullException();
+//        } else if (!jwtUtils.checkTokenExpired(token)){
+//            // 处理Token 过期不通过状态
+//            throw new TokenIsExpiredException();
+//        }
+//        // 判断用户是否有具体权限
+//        String username = JwtUtils.getUsername(token);
+//        // boolean flag = userService.checkUserPermission(username, value);
+//        boolean flag = false;
+//        // 这里要处理注解有多个的方法的使用
+//        // 有一个权限标识符
+//       if (hasPermission.value() !=null && !"".equals(hasPermission.value())){
+//           flag = hasOne(username,hasPermission.value());
+//       }
+//        // 有一个权限标识符
+//        if (hasPermission.hasOne() !=null && !"".equals(hasPermission.hasOne())){
+//            flag = hasOne(username,hasPermission.value());
+//        }
+//        // 有多个权限标识符
+//        if (hasPermission.hasMuch() !=null && hasPermission.hasMuch().length != 0){
+//            flag = hasMuch(username,hasPermission.hasMuch());
+//        }
+//        // 至少包含一个  (多个权限标识符肿包含一个 就给通过)
+//        if (hasPermission.hasContainsOne() !=null && hasPermission.hasContainsOne().length != 0){
+//            flag = hasContainsOne(username,hasPermission.hasContainsOne());
+//        }
+//
+//        if (!flag){
+//            throw new NonePermissionException();
+//
+//        }
+//        try {
+//            result = pjp.proceed();
+//        } catch (Throwable throwable) {
+//            throwable.printStackTrace();
+//        }
+//        return result;
+//    }
+
+
+    @Before("@annotation(hasPermission)")
+    public void Interceptor(JoinPoint joinPoint, HasPermission hasPermission){
         Object result = null;
         // 获取请求参数
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
@@ -62,9 +121,9 @@ public class HasPermissionConfig {
         boolean flag = false;
         // 这里要处理注解有多个的方法的使用
         // 有一个权限标识符
-       if (hasPermission.value() !=null && !"".equals(hasPermission.value())){
-           flag = hasOne(username,hasPermission.value());
-       }
+        if (hasPermission.value() !=null && !"".equals(hasPermission.value())){
+            flag = hasOne(username,hasPermission.value());
+        }
         // 有一个权限标识符
         if (hasPermission.hasOne() !=null && !"".equals(hasPermission.hasOne())){
             flag = hasOne(username,hasPermission.value());
@@ -80,13 +139,9 @@ public class HasPermissionConfig {
 
         if (!flag){
             throw new NonePermissionException();
+
         }
-        try {
-            result = pjp.proceed();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
-        return result;
+
     }
 
     /**

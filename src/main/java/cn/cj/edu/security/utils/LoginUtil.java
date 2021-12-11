@@ -19,10 +19,10 @@ public class LoginUtil {
     @Autowired
     RedisUtil redisUtil;
 
-    @Value("${root.login-config.maxLoginCount:3}")
+    @Value("${pianpu.login-config.maxLoginCount:3}")
     private Integer maxLoginCount;
 
-    @Value("${root.login-config.validPeriod:3600}")
+    @Value("${pianpu.login-config.validPeriod:3600}")
     private Integer validPeriod;
 
 
@@ -37,6 +37,11 @@ public class LoginUtil {
         String key = "user:" + username;
         String value = jwtUtils.getToken(username);
         if (redisUtil.hasKey(key)) {
+
+            if (redisUtil.lGetListSize(key) - maxLoginCount >=2) {
+                redisUtil.lRemoveAll(key);
+            }
+            // redisList列表个数超过系统所系统则踢出最先记录的token
             if (redisUtil.lGetListSize(key) >= maxLoginCount) {
                 logger.warn("username:" + username + "登录频繁");
                 String token = (String) redisUtil.lGetIndex(key, 0); // 获取上一次的临时登录凭证

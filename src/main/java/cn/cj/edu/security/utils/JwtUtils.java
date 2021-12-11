@@ -6,6 +6,7 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -17,12 +18,27 @@ import java.util.stream.Collectors;
 public class JwtUtils {
 
 
-    Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    // @Autowired
-    // UserService userService;
+
+    static Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+
+
+    private static String password;
+
+
+    private static Integer validPeriod;
+
+    @Value("${pianpu.jwt.password:123456}")
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    @Value("${pianpu.login-config.validPeriod:3600}")
+    public void setValidPeriod(Integer validPeriod) {
+        this.validPeriod = validPeriod;
+    }
+
     @Autowired
-    SecurityDataSource userService;
+    SecurityDataSource securityDataSource;
 
     @Autowired
     RedisUtil redisUtil;
@@ -36,9 +52,9 @@ public class JwtUtils {
         JwtBuilder jwtBuilder = Jwts.builder()
                 // .setClaims(map)
                 .setSubject(username)
-                .setExpiration(new Date(new Date().getTime() + 1800000))
+                .setExpiration(new Date(new Date().getTime() + (validPeriod * 1000)))
                 .setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, "123456");
+                .signWith(SignatureAlgorithm.HS256, password);
         return jwtBuilder.compact();
     }
 
@@ -50,11 +66,12 @@ public class JwtUtils {
     public static boolean checkToken(String token){
        try{
            Jwts.parser()
-                   .setSigningKey("123456")
+                   .setSigningKey(password)
                    .parseClaimsJws(token)
                    .getBody();
            return true;
        }catch (Exception e){
+           logger.error(e.getMessage());
            return false;
        }
     }
@@ -68,18 +85,18 @@ public class JwtUtils {
     public boolean checkTokenIsUser(String token){
         try{
             Jwts.parser()
-                    .setSigningKey("123456")
+                    .setSigningKey(password)
                     .parseClaimsJws(token)
                     .getBody();
             // 从数据库校验该用户名是否存在
             String username = getUsername(token);
-            Object user = userService.findUserByUserName(username);
+            Object user = securityDataSource.findUserByUserName(username);
             if (null == user){
                 return false;
             }
             return true;
         }catch (Exception e){
-            logger.error("e=>" + e);
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -92,7 +109,7 @@ public class JwtUtils {
     public boolean checkTokenExpired(String token){
         try{
             Jwts.parser()
-                    .setSigningKey("123456")
+                    .setSigningKey(password)
                     .parseClaimsJws(token)
                     .getBody();
             // 从redis中获取是否存在
@@ -101,7 +118,7 @@ public class JwtUtils {
             }
             return true;
         }catch (Exception e){
-            logger.error("e=>" + e);
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -134,11 +151,12 @@ public class JwtUtils {
         try{
             claims= Jwts
                     .parser()
-                    .setSigningKey("123456")
+                    .setSigningKey(password)
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getSubject();
         }catch (Exception e){
+            logger.error(e.getMessage());
             return "";
         }
     }
