@@ -56,4 +56,16 @@ public interface SecurityDataSource {
      */
     Object handleTokenUserIsNull();
 
+    /**
+     * 无权限处理
+     * @return
+     */
+    Object handleNonePermission();
+
+    /**
+     * 无角色处理
+     * @return
+     */
+    Object handleNoneRole();
+
 }

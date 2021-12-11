@@ -4,9 +4,12 @@ import cn.cj.edu.security.exception.TokenIsErrorException;
 import cn.cj.edu.security.exception.TokenIsExpiredException;
 import cn.cj.edu.security.exception.TokenIsNullException;
 import cn.cj.edu.security.exception.TokenUserIsNullException;
+import cn.cj.edu.security.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,5 +68,6 @@ public class GlobExceptionHandle {
     public Object exceptionHandlerTokenUserIsNullException(TokenUserIsNullException e){
         return securityDataSource.handleTokenUserIsNull();
     }
+
 
 }

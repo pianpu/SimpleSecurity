@@ -29,6 +29,13 @@ public class SimpleCheckRoleAndPermission {
     @Autowired
     RedisUtil redisUtil;
 
+
+    /**
+     * 检查用户是否拥有该权限标识符
+     * @param username
+     * @param value
+     * @return
+     */
     public boolean checkUserPermission(String username, String value) {
         // 先从redis 缓存中拿数据
         boolean flag = false;
@@ -55,6 +62,12 @@ public class SimpleCheckRoleAndPermission {
         return flag;
     }
 
+    /**
+     * 检测用户是否拥有该角色
+     * @param username
+     * @param value
+     * @return
+     */
     public boolean checkUserRole(String username, String value) {
         // 先从redis 缓存中拿数据
         boolean flag = false;

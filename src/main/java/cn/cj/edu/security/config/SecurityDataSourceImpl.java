@@ -77,5 +77,13 @@ public class SecurityDataSourceImpl implements SecurityDataSource{
         return Result.fail("自定义实现接口，当前用户不存在");
     }
 
+    @Override
+    public Object handleNonePermission() {
+        return Result.fail("自定义实现接口，无权限访问");
+    }
 
+    @Override
+    public Object handleNoneRole() {
+        return Result.fail("自定义实现接口，无角色访问");
+    }
 }

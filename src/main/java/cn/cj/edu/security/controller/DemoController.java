@@ -38,8 +38,8 @@ public class DemoController {
         return userService.findUserByUsernameAndPassword(new SimpleUser(null, username, password));
     }
 
-    @HasRole(hasMuch = {"admin","user"})
-    @HasPermission(hasMuch = {"DEMO_SHOW"})
+    @HasRole(hasMuch = {"admin","user","ddasdas"})
+    @HasPermission(hasMuch = {"xxxx"})
     @GetMapping("/")
     public Result index(){
         return Result.success("授权后可见");

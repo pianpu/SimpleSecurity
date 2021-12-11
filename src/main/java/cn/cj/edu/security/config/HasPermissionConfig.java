@@ -1,6 +1,10 @@
 package cn.cj.edu.security.config;
 
 
+import cn.cj.edu.security.exception.TokenIsErrorException;
+import cn.cj.edu.security.exception.TokenIsExpiredException;
+import cn.cj.edu.security.exception.TokenIsNullException;
+import cn.cj.edu.security.exception.TokenUserIsNullException;
 import cn.cj.edu.security.utils.JwtUtils;
 import cn.cj.edu.security.utils.Result;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -42,18 +46,21 @@ public class HasPermissionConfig {
         HttpServletRequest request = servletRequest.getRequest();
         String token = request.getHeader("token");
         // 拦截暂未登录或已过期
-        if (token==null || token.length() <0){
-            // token为空
-            return securityDataSource.handleTokenIsNull();
-        }else if (!jwtUtils.checkTokenIsUser(token)){
-            // 用户不存在
-            return Result.fail("Token过期...");
-        }else if (!jwtUtils.checkTokenExpired(token)){
-            // token 过期
-            return securityDataSource.handleTokenExpired();
+        if (token == null){
+            // 处理Token 为空状态
+            throw new TokenIsNullException();
+        }else if (!jwtUtils.checkToken(token)){
+            // 处理Token 校验不通过状态
+            throw new TokenIsErrorException();
+        } else if (!jwtUtils.checkTokenIsUser(token)){
+            // 处理Token 挂靠用户不存在状态
+            throw new TokenUserIsNullException();
+        } else if (!jwtUtils.checkTokenExpired(token)){
+            // 处理Token 过期不通过状态
+            throw new TokenIsExpiredException();
         }
         // 判断用户是否有具体权限
-        String username = jwtUtils.getUsername(token);
+        String username = JwtUtils.getUsername(token);
         // boolean flag = userService.checkUserPermission(username, value);
         boolean flag = false;
         // 这里要处理注解有多个的方法的使用
@@ -75,7 +82,7 @@ public class HasPermissionConfig {
         }
 
         if (!flag){
-            return Result.fail("无权限访问");
+            return securityDataSource.handleNonePermission();
         }
         try {
             result = pjp.proceed();
