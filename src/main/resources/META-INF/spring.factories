@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.cj.edu.security.config.ScanConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.github.pianpu.security.config.ScanConfig
