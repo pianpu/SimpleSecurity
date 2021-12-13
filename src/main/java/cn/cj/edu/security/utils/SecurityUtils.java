@@ -23,7 +23,7 @@ public class SecurityUtils {
     Logger logger = LoggerFactory.getLogger(SecurityUtils.class);
 
 
-    @Autowired
+    @Autowired(required = false)
     SecurityDataSource securityDataSource;
 
     @Autowired
@@ -38,19 +38,22 @@ public class SecurityUtils {
         ServletRequestAttributes servletRequest= (ServletRequestAttributes) requestAttributes;
         HttpServletRequest request = servletRequest.getRequest();
         String token = request.getHeader("token");
-
-        if (token==null || token.length() <0){
-            // 处理Token 为空状态
-            throw new TokenIsNullException();
-        }else if (!jwtUtils.checkToken(token)){
-            // 处理Token 校验不通过状态
-            throw new TokenIsErrorException();
-        } else if (!jwtUtils.checkTokenIsUser(token)){
-            // 处理Token 挂靠用户不存在状态
-            throw new TokenUserIsNullException();
-        } else if (!jwtUtils.checkTokenExpired(token)){
-            // 处理Token 过期不通过状态
-            throw new TokenIsExpiredException();
+        try{
+            if (token==null || token.length() <0){
+                // 处理Token 为空状态
+                throw new TokenIsNullException();
+            }else if (!jwtUtils.checkToken(token)){
+                // 处理Token 校验不通过状态
+                throw new TokenIsErrorException();
+            } else if (!jwtUtils.checkTokenIsUser(token)){
+                // 处理Token 挂靠用户不存在状态
+                throw new TokenUserIsNullException();
+            } else if (!jwtUtils.checkTokenExpired(token)){
+                // 处理Token 过期不通过状态
+                throw new TokenIsExpiredException();
+            }
+        }catch (Exception e){
+            return null;
         }
         String username = jwtUtils.getUsername(token);
         return username;

@@ -5,6 +5,7 @@ import cn.cj.edu.security.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,11 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 全局异常处理类
  */
 @ControllerAdvice
+@ConditionalOnBean(SecurityDataSource.class)
 public class GlobExceptionHandle {
 
     Logger logger = LoggerFactory.getLogger(GlobExceptionHandle.class);
 
-    @Autowired
+    @Autowired(required = false)
     SecurityDataSource securityDataSource;
 
     /**

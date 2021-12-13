@@ -5,6 +5,7 @@ import cn.cj.edu.security.entity.SimpleUser;
 import cn.cj.edu.security.service.UserService;
 import cn.cj.edu.security.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Configuration
+@ConditionalOnBean(SecurityDataSource.class)
 public class InterCaptorConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -55,7 +57,7 @@ class UserInterceptor implements HandlerInterceptor {
 
     @Autowired
     JwtUtils jwtUtils;
-    @Autowired
+    @Autowired(required = false)
     SecurityDataSource securityDataSource;
 
     @Override

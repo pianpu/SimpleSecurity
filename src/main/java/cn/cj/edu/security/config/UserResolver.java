@@ -11,6 +11,7 @@ import cn.cj.edu.security.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -25,6 +26,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  */
 
 @Component
+
 public class UserResolver implements HandlerMethodArgumentResolver {
 
     Logger logger = LoggerFactory.getLogger(UserResolver.class);

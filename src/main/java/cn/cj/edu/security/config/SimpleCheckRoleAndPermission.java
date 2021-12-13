@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class SimpleCheckRoleAndPermission {
 
-    @Autowired
+    @Autowired(required = false)
     SecurityDataSource securityDataSource;
 
     Logger logger = LoggerFactory.getLogger(SimpleCheckRoleAndPermission.class);

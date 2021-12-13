@@ -3,8 +3,10 @@ package cn.cj.edu.security.config;
 import cn.cj.edu.security.entity.SimplePermission;
 import cn.cj.edu.security.entity.SimpleRole;
 import cn.cj.edu.security.entity.SimpleUser;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 
 
 public interface SecurityDataSource {

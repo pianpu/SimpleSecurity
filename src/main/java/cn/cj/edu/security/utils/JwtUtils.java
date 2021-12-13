@@ -37,7 +37,7 @@ public class JwtUtils {
         this.validPeriod = validPeriod;
     }
 
-    @Autowired
+    @Autowired(required = false)
     SecurityDataSource securityDataSource;
 
     @Autowired
