@@ -23,8 +23,8 @@ public class GlobExceptionHandle {
 
     /**
      * 处理Token 为空的异常
-     * @param e
-     * @return
+     * @param e 异常
+     * @return 返回自定义结果
      */
     @ExceptionHandler(value = TokenIsNullException.class)
     @ResponseBody
@@ -34,8 +34,8 @@ public class GlobExceptionHandle {
 
     /**
      * 处理Token 签名错误的异常
-     * @param e
-     * @return
+     * @param e 异常
+     * @return 返回自定义结果
      */
     @ExceptionHandler(value = TokenIsErrorException.class)
     @ResponseBody
@@ -45,8 +45,8 @@ public class GlobExceptionHandle {
 
     /**
      * 处理Token 过期的异常
-     * @param e
-     * @return
+     * @param e 异常
+     * @return 返回自定义结果
      */
     @ExceptionHandler(value = TokenIsExpiredException.class)
     @ResponseBody
@@ -56,8 +56,8 @@ public class GlobExceptionHandle {
 
     /**
      * 处理Token 挂靠用户名不存在的异常
-     * @param e
-     * @return
+     * @param e 异常
+     * @return 返回自定义结果
      */
     @ExceptionHandler(value = TokenUserIsNullException.class)
     @ResponseBody
@@ -67,8 +67,8 @@ public class GlobExceptionHandle {
 
     /**
      * 处理无权限
-     * @param e
-     * @return
+     * @param e 异常
+     * @return 返回自定义结果
      */
     @ExceptionHandler(value = NonePermissionException.class)
     @ResponseBody
@@ -78,13 +78,24 @@ public class GlobExceptionHandle {
 
     /**
      * 处理无角色
-     * @param e
-     * @return
+     * @param e 异常
+     * @return 返回自定义结果
      */
     @ExceptionHandler(value = NoneRoleException.class)
     @ResponseBody
     public Object exceptionHandlerNoneRoleException(NoneRoleException e){
         return securityDataSource.handleNoneRole();
+    }
+
+    /**
+     * 处理登录失败
+     * @param e 异常
+     * @return 返回自定义结果
+     */
+    @ExceptionHandler(value = LoginErrorException.class)
+    @ResponseBody
+    public Object exceptionHandlerLoginErrorException(LoginErrorException e){
+        return securityDataSource.handleLoginError();
     }
 
 

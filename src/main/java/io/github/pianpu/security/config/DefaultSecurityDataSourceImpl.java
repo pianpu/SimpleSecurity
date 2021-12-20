@@ -3,24 +3,21 @@ package io.github.pianpu.security.config;
 import io.github.pianpu.security.entity.SimplePermission;
 import io.github.pianpu.security.entity.SimpleRole;
 import io.github.pianpu.security.entity.SimpleUser;
-
-import io.github.pianpu.security.utils.LoginUtil;
 import io.github.pianpu.security.utils.RedisUtil;
 import io.github.pianpu.security.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-
+@Service
 public class DefaultSecurityDataSourceImpl implements SecurityDataSource{
     Logger logger = LoggerFactory.getLogger(DefaultSecurityDataSourceImpl.class);
 
-    @Autowired
-    LoginUtil loginUtil;
 
 
     @Autowired
@@ -81,5 +78,10 @@ public class DefaultSecurityDataSourceImpl implements SecurityDataSource{
     @Override
     public Object handleNoneRole() {
         return Result.fail("自定义实现接口，无角色访问");
+    }
+
+    @Override
+    public Object handleLoginError() {
+        return Result.fail("自定义实现接口，登录失败，可能是redis的问题");
     }
 }

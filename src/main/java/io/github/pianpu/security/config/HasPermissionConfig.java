@@ -2,7 +2,7 @@ package io.github.pianpu.security.config;
 
 
 import io.github.pianpu.security.exception.*;
-import io.github.pianpu.security.utils.JwtUtils;
+import io.github.pianpu.security.utils.JwtUtil;
 import io.github.pianpu.security.annotation.HasPermission;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,11 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 @Aspect
-@ConditionalOnBean(SecurityDataSource.class)
+@ConditionalOnBean({SecurityDataSource.class})
 public class HasPermissionConfig {
 
     @Autowired
-    JwtUtils jwtUtils;
+    JwtUtil jwtUtils;
 
     @Autowired
     SimpleCheckRoleAndPermission simpleCheckRoleAndPermission;
@@ -50,18 +50,18 @@ public class HasPermissionConfig {
         if (token == null){
             // 处理Token 为空状态
             throw new TokenIsNullException();
-        }else if (!jwtUtils.checkToken(token)){
+        }else if (!jwtUtils.checkToken(token)) {
             // 处理Token 校验不通过状态
             throw new TokenIsErrorException();
+        }else if (!jwtUtils.checkTokenExpired(token)){
+                // 处理Token 过期不通过状态
+                throw new TokenIsExpiredException();
         } else if (!jwtUtils.checkTokenIsUser(token)){
             // 处理Token 挂靠用户不存在状态
             throw new TokenUserIsNullException();
-        } else if (!jwtUtils.checkTokenExpired(token)){
-            // 处理Token 过期不通过状态
-            throw new TokenIsExpiredException();
         }
         // 判断用户是否有具体权限
-        String username = JwtUtils.getUsername(token);
+        String username = JwtUtil.getUsername(token);
         // boolean flag = userService.checkUserPermission(username, value);
         boolean flag = false;
         // 这里要处理注解有多个的方法的使用

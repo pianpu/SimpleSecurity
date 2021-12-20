@@ -32,9 +32,9 @@ public class SimpleCheckRoleAndPermission {
 
     /**
      * 检查用户是否拥有该权限标识符
-     * @param username
-     * @param value
-     * @return
+     * @param username 用户名
+     * @param value 权限代码
+     * @return true/false
      */
     public boolean checkUserPermission(String username, String value) {
         // 先从redis 缓存中拿数据
@@ -64,9 +64,9 @@ public class SimpleCheckRoleAndPermission {
 
     /**
      * 检测用户是否拥有该角色
-     * @param username
-     * @param value
-     * @return
+     * @param username 用户名
+     * @param value 角色代码
+     * @return true/false
      */
     public boolean checkUserRole(String username, String value) {
         // 先从redis 缓存中拿数据

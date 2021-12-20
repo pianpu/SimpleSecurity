@@ -1,7 +1,7 @@
 package io.github.pianpu.security.config;
 
 import io.github.pianpu.security.entity.SimpleUser;
-import io.github.pianpu.security.utils.JwtUtils;
+import io.github.pianpu.security.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
@@ -50,7 +50,7 @@ public class InterCaptorConfig implements WebMvcConfigurer {
 class UserInterceptor implements HandlerInterceptor {
 
     @Autowired
-    JwtUtils jwtUtils;
+    JwtUtil jwtUtils;
     @Autowired(required = false)
     SecurityDataSource securityDataSource;
 

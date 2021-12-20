@@ -4,7 +4,7 @@ package io.github.pianpu.security.config;
 
 import io.github.pianpu.security.annotation.HasRole;
 import io.github.pianpu.security.exception.*;
-import io.github.pianpu.security.utils.JwtUtils;
+import io.github.pianpu.security.utils.JwtUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -20,11 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 @Aspect
-@ConditionalOnBean(SecurityDataSource.class)
+@ConditionalOnBean({SecurityDataSource.class})
 public class HasRoleConfig {
 
     @Autowired
-    JwtUtils jwtUtils;
+    JwtUtil jwtUtils;
 
     @Autowired(required = false)
     SecurityDataSource securityDataSource;

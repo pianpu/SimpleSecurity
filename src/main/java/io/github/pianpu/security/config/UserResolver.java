@@ -5,7 +5,7 @@ import io.github.pianpu.security.exception.TokenIsErrorException;
 import io.github.pianpu.security.exception.TokenIsExpiredException;
 import io.github.pianpu.security.exception.TokenIsNullException;
 import io.github.pianpu.security.exception.TokenUserIsNullException;
-import io.github.pianpu.security.utils.JwtUtils;
+import io.github.pianpu.security.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class UserResolver implements HandlerMethodArgumentResolver {
     Logger logger = LoggerFactory.getLogger(UserResolver.class);
 
     @Autowired
-    JwtUtils jwtUtils;
+    JwtUtil jwtUtils;
 
 
     @Override

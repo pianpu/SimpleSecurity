@@ -10,27 +10,48 @@
     </parent>
     <groupId>io.github.pianpu</groupId>
     <artifactId>security</artifactId>
-    <version>1.0.0</version>
-    <name>security</name>
-    <description>security project for Spring Boot</description>
+    <version>1.0.1</version>
+    <name>io.github.pianpu:security</name>
+    <description>it is SimpleSecurity,auto generate Token after login and annotated and static method satisfy your use</description>
+    <url>https://github.com/pianpu/SimpleSecurity</url>
     <properties>
         <java.version>1.8</java.version>
     </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>pianpu</name>
+            <email>pianpu@foxmail.com</email>
+            <url>https://github.com/pianpu/SimpleSecurity</url>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/pianpu/SimpleSecurity.git</connection>
+        <developerConnection>scm:git:https://github.com/pianpu/SimpleSecurity.git</developerConnection>
+        <url>https://github.com/pianpu/SimpleSecurity.git</url>
+    </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -52,64 +73,53 @@
             <artifactId>spring-boot-autoconfigure-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
-
     </dependencies>
 
-    <!--    <build>-->
-    <!--        <resources>-->
-    <!--            <resource>-->
-    <!--                <directory>src/main/java</directory>-->
-    <!--               <includes>-->
-    <!--                   <include>**/**.xml</include>-->
-    <!--               </includes>-->
-    <!--                <filtering>false</filtering>-->
-    <!--            </resource>-->
-    <!--        </resources>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>org.springframework.boot</groupId>-->
-    <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-    <!--                <configuration>-->
-    <!--                    <classifier>exec</classifier>-->
-    <!--                    <excludes>-->
-    <!--                        <exclude>-->
-    <!--                            <groupId>org.projectlombok</groupId>-->
-    <!--                            <artifactId>lombok</artifactId>-->
-    <!--                        </exclude>-->
-    <!--                    </excludes>-->
-    <!--                </configuration>-->
-    <!--            </plugin>-->
-    <!--        </plugins>-->
-    <!--    </build>-->
-
-<!--    <build>-->
-<!--        <resources>-->
-<!--            <resource>-->
-<!--                <directory>src/main/java</directory>-->
-<!--                <includes>-->
-<!--                    <include>**/**.xml</include>-->
-<!--                </includes>-->
-<!--                <filtering>false</filtering>-->
-<!--            </resource>-->
-<!--        </resources>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <source>1.8</source>-->
-<!--                    <target>1.8</target>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
 
     <build>
         <plugins>
+            <!-- Source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -122,21 +132,10 @@
     </build>
 
 
-        <!--            <plugins>-->
-        <!--                <plugin>-->
-        <!--                    <groupId>org.springframework.boot</groupId>-->
-        <!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
-        <!--                    <configuration>-->
-        <!--                        <excludes>-->
-        <!--                            <exclude>-->
-        <!--                                <groupId>org.springframework.boot</groupId>-->
-        <!--                                <artifactId>spring-boot-autoconfigure-processor</artifactId>-->
-        <!--                            </exclude>-->
-        <!--                        </excludes>-->
-        <!--                    </configuration>-->
-        <!--                </plugin>-->
-        <!--            </plugins>-->
+<!--    <build>-->
+<!--        <plugins>-->
 
+<!--        </plugins>-->
 <!--    </build>-->
 
 </project>

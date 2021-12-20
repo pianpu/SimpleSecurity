@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class JwtUtils {
+public class JwtUtil {
 
 
 
 
-    static Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    static Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
 
     private static String password;
@@ -37,16 +37,21 @@ public class JwtUtils {
         this.validPeriod = validPeriod;
     }
 
+
+    private static SecurityDataSource securityDataSource;
+
     @Autowired(required = false)
-    SecurityDataSource securityDataSource;
+    public void setSecurityDataSource(SecurityDataSource securityDataSource) {
+        JwtUtil.securityDataSource = securityDataSource;
+    }
 
     @Autowired
     RedisUtil redisUtil;
 
     /**
      * 生成Token
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return token
      */
     public static String getToken(String username){
         JwtBuilder jwtBuilder = Jwts.builder()
@@ -60,8 +65,8 @@ public class JwtUtils {
 
     /**
      * 校验token是否正确
-     * @param token
-     * @return
+     * @param token token
+     * @return true/false
      */
     public static boolean checkToken(String token){
        try{
@@ -79,10 +84,10 @@ public class JwtUtils {
 
     /**
      * 校验token是否正确 且 判断数据库是否有包含该用户
-     * @param token
-     * @return
+     * @param token token
+     * @return true/false
      */
-    public boolean checkTokenIsUser(String token){
+    public static boolean checkTokenIsUser(String token){
         try{
             Jwts.parser()
                     .setSigningKey(password)
@@ -103,8 +108,8 @@ public class JwtUtils {
 
     /**
      * 校验token是否过期
-     * @param token
-     * @return
+     * @param token token
+     * @return true/false
      */
     public boolean checkTokenExpired(String token){
         try{
@@ -125,8 +130,8 @@ public class JwtUtils {
 
     /**
      * 检测token是否还存在缓存之中
-     * @param token
-     * @return
+     * @param token token
+     * @return true/false
      */
     public boolean isExist(String token){
         String username = getUsername(token);
@@ -146,6 +151,11 @@ public class JwtUtils {
     }
 
 
+    /**
+     * 根据token获取用户名
+     * @param token token
+     * @return 用户名
+     */
     public static String getUsername(String token){
         Claims claims;
         try{
